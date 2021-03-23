@@ -5,14 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:paint_app/DrawingTools/dart/paintFunctions.dart';
 import 'package:path_provider/path_provider.dart';
 
-class RecordPaints {
-  int startIndex;
-  int endIndex;
-  RecordPaints(this.startIndex, this.endIndex);
-}
-
-enum paintTools {brush, eraser, square, circle}
-
 class DrawingInterface extends StatefulWidget {
 
   final pointsList;

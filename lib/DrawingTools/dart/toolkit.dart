@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:paint_app/DrawingTools/dart/drawingInterface.dart';
+import 'package:paint_app/DrawingTools/dart/paintFunctions.dart';
 
 class ToolBox extends StatelessWidget {
 

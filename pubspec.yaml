@@ -31,6 +31,8 @@ dependencies:
   flutter_colorpicker: ^0.3.5
   path_provider: ^1.6.11
   fluttertoast: ^7.1.8
+  sqflite: any
+  intl: any
 
 dev_dependencies:
   flutter_test:

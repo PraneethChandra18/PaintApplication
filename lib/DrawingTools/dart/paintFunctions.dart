@@ -23,6 +23,14 @@ class PaintedSquares {
   PaintedSquares({this.paint, this.start, this.end});
 }
 
+class RecordPaints {
+  int startIndex;
+  int endIndex;
+  RecordPaints(this.startIndex, this.endIndex);
+}
+
+enum paintTools {brush, eraser, square, circle}
+
 class PainterCanvas extends CustomPainter {
   List<PaintedPoints> pointsList;
 
