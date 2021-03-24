@@ -149,17 +149,25 @@ class _SelectStrokeWidthState extends State<SelectStrokeWidth> {
                 ),
               ),
             ),
-            Slider(
-              label: strokeWidth.abs().toString(),
-              value: strokeWidth,
-              max: 50.0,
-              min: 1.0,
-              divisions: 49,
-              onChanged: (val) {
-                setState(() {
-                  strokeWidth = val;
-                });
-              }
+            SliderTheme(
+              data: SliderThemeData(
+                thumbColor: Colors.blue,
+                activeTrackColor: Colors.blue,
+                inactiveTrackColor: Colors.blue[100],
+                overlayColor: Colors.transparent,
+              ),
+              child: Slider(
+                label: strokeWidth.abs().toString(),
+                value: strokeWidth,
+                max: 50.0,
+                min: 1.0,
+                divisions: 49,
+                onChanged: (val) {
+                  setState(() {
+                    strokeWidth = val;
+                  });
+                }
+              ),
             ),
             Container(
               alignment: Alignment.centerRight,

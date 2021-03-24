@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:paint_app/models/models.dart';
+import 'package:paint_app/utils/models.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 

@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:paint_app/DrawingTools/dart/drawingInterface.dart';
 import 'package:paint_app/DrawingTools/dart/paintFunctions.dart';
 import 'package:paint_app/DrawingTools/dart/toolkit.dart';
+import 'package:paint_app/utils/alertDialogs.dart';
 
 class Practice extends StatefulWidget {
   @override
@@ -99,14 +100,19 @@ class _PracticeState extends State<Practice> {
               Container(
                 padding: EdgeInsets.fromLTRB(0, 15, 0, 10),
                 child: FlatButton(
-                  onPressed: () {
-                    showToastMessage("All clear!");
-                    setState(() {
-                      pointsList.clear();
-                      paintedPoints.clear();
-                      squaresList.clear();
-                      circleList.clear();
-                    });
+                  onPressed: () async {
+
+                    bool result = await confirmationDialog(context, "Reset");
+                    if(result == true)
+                    {
+                      showToastMessage("All clear!");
+                      setState(() {
+                        pointsList.clear();
+                        paintedPoints.clear();
+                        squaresList.clear();
+                        circleList.clear();
+                      });
+                    }
                   },
                   child: Text(
                     "Reset",
@@ -123,11 +129,17 @@ class _PracticeState extends State<Practice> {
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 15, 0, 10),
                     child: FlatButton(
-                      onPressed: () {
-                        showToastMessage("Progress saved!");
-                        setState(() {
+                      onPressed: () async {
 
-                        });
+                        int result = await saveExistedDialog(context);
+                        if(result == 1)
+                        {
+                          showToastMessage("Progress saved!");
+                        }
+                        else if(result == 2)
+                        {
+                          showToastMessage("Progress saved!");
+                        }
                       },
                       child: Text(
                         "Save Progress",
@@ -316,7 +328,14 @@ class _PracticeState extends State<Practice> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pop(context),
+        onPressed: () async {
+          int result = await exitDialog(context);
+          if(result == 1) {
+            showToastMessage("Progress saved!");
+            Navigator.pop(context);
+          }
+          else if(result == 2) Navigator.pop(context);
+        },
         child: Icon(Icons.exit_to_app),
       ),
     );
