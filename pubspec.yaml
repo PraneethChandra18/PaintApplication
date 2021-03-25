@@ -33,6 +33,7 @@ dependencies:
   fluttertoast: ^7.1.8
   sqflite: any
   intl: any
+  path: any
 
 dev_dependencies:
   flutter_test:
