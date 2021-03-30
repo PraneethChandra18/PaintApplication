@@ -1,6 +1,29 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:paint_app/DrawingTools/dart/paintFunctions.dart';
+import 'package:paint_app/utils/global.dart';
+import 'package:diff_image/diff_image.dart';
+import 'package:image/image.dart' as Img;
+
+double evaluateDrawing(Uint8List first, Uint8List second) {
+
+  Img.Image firstImage = Img.decodeImage(first);
+  Img.Image secondImage = Img.decodeImage(second);
+
+  Img.Image fImage = Img.copyResize(firstImage, width: 500, height: 500);
+  Img.Image sImage = Img.copyResize(secondImage, width: 500, height: 500);
+
+  DiffImgResult diff = DiffImage.compareFromMemory(
+    fImage,
+    sImage,
+    asPercentage: true,
+    ignoreAlpha: true,
+  );
+
+  return diff.diffValue;
+}
+
 
 class ToolBox extends StatelessWidget {
 

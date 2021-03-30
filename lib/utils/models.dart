@@ -1,5 +1,39 @@
 import 'package:paint_app/DrawingTools/dart/paintFunctions.dart';
 
+class UserInformation {
+
+  int _difficultyLevel;
+  int _score;
+
+  UserInformation(this._score);
+  UserInformation.withLevel(this._difficultyLevel, this._score);
+
+  int get difficultyLevel => _difficultyLevel;
+
+  int get score => _score;
+
+  set score(int newScore) {
+    this._score = newScore;
+  }
+
+  Map<String, dynamic> toMap() {
+
+    var map = Map<String, dynamic> ();
+
+    if(difficultyLevel!=null) {
+      map['difficultyLevel'] = _difficultyLevel;
+    }
+    map['score'] = _score;
+
+    return map;
+  }
+
+  UserInformation.fromMapObject(Map<String, dynamic> map) {
+    this._difficultyLevel = map['DifficultyLevel'];
+    this._score = map['Score'];
+  }
+}
+
 class SavedDrawings {
 
   int id;

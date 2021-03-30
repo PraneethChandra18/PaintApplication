@@ -1,9 +1,9 @@
 import 'dart:io';
-
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 
-Future<dynamic> confirmationDialog (BuildContext context, String confirmationFor) async {
+
+Future<dynamic> confirmationDialog(BuildContext context, String confirmationFor) async {
   return await showDialog(
   context: context,
   builder: (context) {
@@ -29,7 +29,7 @@ Future<dynamic> confirmationDialog (BuildContext context, String confirmationFor
   );
 }
 
-Future<dynamic> saveExistedDialog (BuildContext context) {
+Future<dynamic> saveExistedDialog(BuildContext context) {
   return showDialog(
     context: context,
     builder: (context) {
@@ -61,7 +61,7 @@ Future<dynamic> saveExistedDialog (BuildContext context) {
   );
 }
 
-Future<dynamic> exitDialog (BuildContext context) {
+Future<dynamic> exitDialog(BuildContext context) {
   return showDialog(
     context: context,
     builder: (context) {
@@ -93,7 +93,7 @@ Future<dynamic> exitDialog (BuildContext context) {
   );
 }
 
-showPhotoDialog (BuildContext context, File photo) {
+showPhotoDialog(BuildContext context, File photo) {
 
   Size size = MediaQuery.of(context).size;
 
@@ -128,6 +128,108 @@ showPhotoDialog (BuildContext context, File photo) {
         ),
         backgroundColor: Colors.black26,
         content: Image.file(photo,height: size.height*0.8,width: size.width*0.8),
+      );
+    },
+  );
+}
+
+class HelpCarousel extends StatefulWidget {
+
+  final itemList;
+  HelpCarousel(this.itemList);
+
+  @override
+  _HelpCarouselState createState() => _HelpCarouselState();
+}
+
+class _HelpCarouselState extends State<HelpCarousel> {
+
+  CarouselController buttonCarouselController = CarouselController();
+
+  int _current = 0;
+
+  @override
+  Widget build(BuildContext context) {
+
+    Size size = MediaQuery.of(context).size;
+
+    return Container(
+        height: size.height*0.6,
+        width: size.width*0.8,
+        child: Column(
+          children: [
+            CarouselSlider(
+              carouselController: buttonCarouselController,
+              options: CarouselOptions(
+                  aspectRatio: 1.0,
+                  viewportFraction: 0.9,
+                  enlargeCenterPage: true,
+                  enableInfiniteScroll: false,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _current = index;
+                    });
+                  }
+              ),
+              items: widget.itemList.map<Widget>((item) => Container(
+                child: Column(
+                  children: [
+                    Text(
+                      item[0],
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    SizedBox(height: 20.0,),
+                    Image.asset(item[1], fit: BoxFit.cover),
+                  ],
+                ),
+              )).toList(),
+            ),
+            SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _current != 0 ? RaisedButton(
+                  onPressed: () => buttonCarouselController.previousPage(
+                      duration: Duration(milliseconds: 300), curve: Curves.linear),
+                  child: Text('<- Previous'),
+                ) : SizedBox(height:0),
+                _current != widget.itemList.length - 1 ? RaisedButton(
+                  onPressed: () => buttonCarouselController.nextPage(
+                      duration: Duration(milliseconds: 300), curve: Curves.linear),
+                  child: Text('Next ->'),
+                ):SizedBox(height:0),
+              ],
+            )
+          ],
+        )
+    );
+  }
+}
+
+showCarouselDialog(BuildContext context, List<List<String>> itemList) {
+
+
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Help",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            CloseButton(
+              color: Colors.white,
+              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.black26,
+        content: HelpCarousel(itemList),
       );
     },
   );

@@ -3,7 +3,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:paint_app/DrawingTools/dart/paintFunctions.dart';
+import 'package:paint_app/DrawingTools/dart/toolkit.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart' show ByteData, rootBundle;
 
 class DrawingInterface extends StatefulWidget {
 
@@ -16,11 +18,15 @@ class DrawingInterface extends StatefulWidget {
   final toolUsageHistory;
   final selectedTool;
   final saveClicked;
+  final captureImage;
+  final evaluate;
   final strokeType;
   final strokeWidth;
   final selectedColor;
   final updatePoints;
-  final toggleSaveClicked;
+  final toggleCaptureImageClicked;
+  final changeEvaluationScore;
+  final finalImage;
 
   DrawingInterface(
       this.pointsList,
@@ -32,11 +38,15 @@ class DrawingInterface extends StatefulWidget {
       this.toolUsageHistory,
       this.selectedTool,
       this.saveClicked,
+      this.captureImage,
+      this.evaluate,
       this.strokeType,
       this.strokeWidth,
       this.selectedColor,
       this.updatePoints,
-      this.toggleSaveClicked,
+      this.toggleCaptureImageClicked,
+      this.changeEvaluationScore,
+      this.finalImage,
       );
 
   @override
@@ -59,6 +69,8 @@ class _DrawingInterfaceState extends State<DrawingInterface> {
   paintTools selectedTool;
   bool isCanvasLocked = false;
   bool saveClicked;
+  bool captureImage;
+  bool evaluate;
 
   StrokeCap strokeType;
   double strokeWidth;
@@ -99,6 +111,8 @@ class _DrawingInterfaceState extends State<DrawingInterface> {
 
     selectedTool = widget.selectedTool;
     saveClicked = widget.saveClicked;
+    captureImage = widget.captureImage;
+    evaluate = widget.evaluate;
     strokeType = widget.strokeType;
     strokeWidth = widget.strokeWidth;
     selectedColor = widget.selectedColor;
@@ -220,15 +234,25 @@ class _DrawingInterfaceState extends State<DrawingInterface> {
                           saveImage: saveClicked,
                           saveCallback: (Picture picture) async {
                             final img = await picture.toImage(constraints.maxWidth.round(),constraints.maxHeight.round());
-                            final bytes = await img.toByteData(format: ImageByteFormat.png);
+                            var bytes = await img.toByteData(format: ImageByteFormat.png);
+                            var byteList = bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
 
-                            final directory = await getExternalStorageDirectory();
-                            final imagePath = '${directory.path}/images_${DateTime.now()}.png' ;
+                            if(captureImage) {
+                              final directory = await getExternalStorageDirectory();
+                              final imagePath = '${directory.path}/images_${DateTime.now()}.png' ;
 
-                            final buffer = bytes.buffer;
-                            await File(imagePath).writeAsBytes(
-                                buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
-                            widget.toggleSaveClicked();
+                              await File(imagePath).writeAsBytes(byteList);
+                              widget.toggleCaptureImageClicked();
+                            }
+
+                            if(evaluate) {
+
+                              ByteData bytes2 = await rootBundle.load(widget.finalImage);
+                              final byteList2 = bytes2.buffer.asUint8List(bytes2.offsetInBytes, bytes2.lengthInBytes);
+
+                              double result = evaluateDrawing(byteList, byteList2);
+                              widget.changeEvaluationScore(result);
+                            }
                           },
                         ),
                       ),

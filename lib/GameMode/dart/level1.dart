@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:paint_app/Database/databaseHelper.dart';
 import 'package:paint_app/DrawingTools/dart/drawingInterface.dart';
 import 'package:paint_app/DrawingTools/dart/paintFunctions.dart';
 import 'package:paint_app/DrawingTools/dart/toolkit.dart';
-import 'package:paint_app/utils/alertDialogs.dart';
+import 'package:paint_app/utils/global.dart';
+import 'package:paint_app/utils/models.dart';
+import 'package:paint_app/utils/supportingWidgets.dart';
+
 
 class Level1 extends StatefulWidget {
   @override
@@ -11,6 +14,8 @@ class Level1 extends StatefulWidget {
 }
 
 class _Level1State extends State<Level1> {
+
+  DatabaseHelper dbHelper = DatabaseHelper();
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -26,24 +31,17 @@ class _Level1State extends State<Level1> {
   List<paintTools> toolUsageHistory = List();
 
   paintTools selectedTool = paintTools.brush;
-  bool saveClicked = false;
-
 
   StrokeCap strokeType = StrokeCap.round;
   double selectedStrokeWidth = 3.0;
 
   Color selectedColor = Colors.black;
 
-  void showToastMessage(String message) {
-    Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black87,
-        textColor: Colors.white,
-        fontSize: 16.0,
-    );
-  }
+  bool saveClicked = false;
+  bool captureImage = false;
+  bool evaluate = true;
+
+  double evaluationScore = 0.0;
 
   void updatePoints(List<PaintedPoints> newPointsList, List<PaintedSquares> newSquaresList, PaintedSquares newSquarePoint,
       List<PaintedCircles> newCircleList, PaintedCircles newCirclePoint, List<RecordPaints> newPaintedPoints, List<paintTools> newToolUsageHistory) {
@@ -82,10 +80,30 @@ class _Level1State extends State<Level1> {
     });
   }
 
-  void toggleSaveClicked() {
+  void toggleCaptureImageClicked() {
     showToastMessage("Image Captured");
     setState(() {
+      captureImage = !captureImage;
       saveClicked = !saveClicked;
+    });
+  }
+
+  void changeEvaluationScore(double x) async {
+
+    int stars = 0;
+
+    if(100-x < 33) stars = 1;
+    else if(100-x < 66) stars = 2;
+    else stars = 3;
+
+    await dbHelper.updateUserInformation(UserInformation.withLevel(1,stars));
+    int c = await dbHelper.getCount();
+    print(c);
+    // print(x);
+    setState(() {
+      evaluationScore = x;
+      saveClicked = !saveClicked;
+      evaluate = false;
     });
   }
 
@@ -151,10 +169,8 @@ class _Level1State extends State<Level1> {
                 child: FlatButton(
                   onPressed: () {
                     setState(() {
-                      pointsList.clear();
-                      paintedPoints.clear();
-                      squaresList.clear();
-                      circleList.clear();
+                      saveClicked = true;
+                      evaluate = true;
                     });
                   },
                   child: Text(
@@ -185,11 +201,15 @@ class _Level1State extends State<Level1> {
                     toolUsageHistory,
                     selectedTool,
                     saveClicked,
+                    captureImage,
+                    evaluate,
                     strokeType,
                     selectedStrokeWidth,
                     selectedColor,
                     updatePoints,
-                    toggleSaveClicked,
+                    toggleCaptureImageClicked,
+                    changeEvaluationScore,
+                    "assets/level1/level1.png",
                 ),
               )
             ),
@@ -223,9 +243,17 @@ class _Level1State extends State<Level1> {
               right: 10,
               top: 30,
               child: OutlineButton(
-                onPressed: () {
-                  print('Help');
-                },
+                onPressed: () => showCarouselDialog(context,
+                  [
+                    ["Step 1", "assets/level1/level1_1.jpg"],
+                    ["Step 2", "assets/level1/level1_2.jpg"],
+                    ["Step 3", "assets/level1/level1_3.jpg"],
+                    ["Step 4", "assets/level1/level1_4.jpg"],
+                    ["Step 5", "assets/level1/level1_5.jpg"],
+                    ["Step 6", "assets/level1/level1_6.jpg"],
+                    ["Final Image", "assets/level1/level1.jpg"]
+                  ]
+                ),
                 child: Row(
                   children: <Widget>[
                     Icon(
@@ -328,8 +356,17 @@ class _Level1State extends State<Level1> {
         onPressed: () async {
           int result = await exitDialog(context);
           if(result == 1) {
-            showToastMessage("Progress saved!");
-            Navigator.pop(context);
+            int result = await saveExistedDialog(context);
+            if(result == 1)
+            {
+              showToastMessage("Progress saved!");
+              Navigator.pop(context);
+            }
+            else if(result == 2)
+            {
+              showToastMessage("Progress saved!");
+              Navigator.pop(context);
+            }
           }
           else if(result == 2) Navigator.pop(context);
         },

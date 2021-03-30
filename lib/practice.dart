@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:paint_app/DrawingTools/dart/drawingInterface.dart';
 import 'package:paint_app/DrawingTools/dart/paintFunctions.dart';
 import 'package:paint_app/DrawingTools/dart/toolkit.dart';
-import 'package:paint_app/utils/alertDialogs.dart';
+import 'package:paint_app/utils/supportingWidgets.dart';
+import 'package:paint_app/utils/global.dart';
 
 class Practice extends StatefulWidget {
   @override
@@ -26,7 +26,6 @@ class _PracticeState extends State<Practice> {
   List<paintTools> toolUsageHistory = List();
 
   paintTools selectedTool = paintTools.brush;
-  bool saveClicked = false;
 
 
   StrokeCap strokeType = StrokeCap.round;
@@ -34,15 +33,11 @@ class _PracticeState extends State<Practice> {
 
   Color selectedColor = Colors.black;
 
-  void showToastMessage(String message) {
-    Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black87,
-        textColor: Colors.white,
-        fontSize: 16.0);
-  }
+  bool saveClicked = false;
+  bool captureImage = false;
+  bool evaluate = true;
+
+  double evaluationScore = 0.0;
 
   void updatePoints(List<PaintedPoints> newPointsList, List<PaintedSquares> newSquaresList, PaintedSquares newSquarePoint,
       List<PaintedCircles> newCircleList, PaintedCircles newCirclePoint, List<RecordPaints> newPaintedPoints, List<paintTools> newToolUsageHistory) {
@@ -81,10 +76,20 @@ class _PracticeState extends State<Practice> {
     });
   }
 
-  void toggleSaveClicked() {
+  void toggleCaptureImageClicked() {
     showToastMessage("Image Captured");
     setState(() {
+      captureImage = !captureImage;
       saveClicked = !saveClicked;
+    });
+  }
+
+  void changeEvaluationScore(double x) {
+    print(x);
+    setState(() {
+      evaluationScore = x;
+      saveClicked = !saveClicked;
+      evaluate = false;
     });
   }
 
@@ -156,6 +161,7 @@ class _PracticeState extends State<Practice> {
                       onPressed: () {
                         setState(() {
                           saveClicked = true;
+                          captureImage = true;
                         });
                       },
                       child: Text(
@@ -188,11 +194,15 @@ class _PracticeState extends State<Practice> {
                     toolUsageHistory,
                     selectedTool,
                     saveClicked,
+                    captureImage,
+                    evaluate,
                     strokeType,
                     selectedStrokeWidth,
                     selectedColor,
                     updatePoints,
-                    toggleSaveClicked,
+                    toggleCaptureImageClicked,
+                    changeEvaluationScore,
+                    "assets/level1/level1.jpg",
                   ),
                 )
             ),

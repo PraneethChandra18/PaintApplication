@@ -34,6 +34,9 @@ dependencies:
   sqflite: any
   intl: any
   path: any
+  carousel_slider: ^3.0.0
+  diff_image: ^1.0.1
+  image: any
 
 dev_dependencies:
   flutter_test:
@@ -51,9 +54,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+     - assets/level1/
+     - assets/level2/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
