@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:paint_app/Database/databaseHelper.dart';
 import 'package:paint_app/DrawingTools/dart/drawingInterface.dart';
 import 'package:paint_app/DrawingTools/dart/paintFunctions.dart';
@@ -105,7 +106,7 @@ class _Level1State extends State<Level1> {
     // print(c);
     displayScore = x.toStringAsPrecision(3);
 
-    await showEvaluationScore(context, displayScore);
+    await showEvaluationScore(context, displayScore, stars);
     // print(x);
     setState(() {
       evaluationScore = x;
@@ -123,72 +124,52 @@ class _Level1State extends State<Level1> {
           child: Column(
             children: <Widget>[
               ToolBox(selectedStrokeWidth, changeStrokeWidth, selectedColor, changeBrushColor, selectedTool, changeShape),
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 15, 0, 10),
-                child: FlatButton(
-                  onPressed: () async {
-                    bool result = await confirmationDialog(context, "Reset");
-                    if(result == true)
-                    {
-                      showToastMessage("All clear!");
-                      setState(() {
-                        pointsList.clear();
-                        paintedPoints.clear();
-                        squaresList.clear();
-                        circleList.clear();
-                      });
-                    }
-                  },
-                  child: Text(
-                      "Reset",
-                    style: TextStyle(
-                      color: Colors.white,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 15, 0, 10),
+                    child: FlatButton(
+                      onPressed: () async {
+                        int result = await saveExistedDialog(context);
+                        if(result == 1)
+                        {
+                          showToastMessage("Progress saved!");
+                        }
+                        else if(result == 2)
+                        {
+                          showToastMessage("Progress saved!");
+                        }
+                      },
+                      child: Text(
+                        "Save Progress",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      color: Colors.amber,
                     ),
                   ),
-                  color: Colors.redAccent,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 15, 0, 10),
-                child: FlatButton(
-                  onPressed: () async {
-                    int result = await saveExistedDialog(context);
-                    if(result == 1)
-                    {
-                      showToastMessage("Progress saved!");
-                    }
-                    else if(result == 2)
-                    {
-                      showToastMessage("Progress saved!");
-                    }
-                  },
-                  child: Text(
-                    "Save Progress",
-                    style: TextStyle(
-                      color: Colors.white,
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 15, 0, 10),
+                    child: FlatButton(
+                      onPressed: () {
+                        setState(() {
+                          saveClicked = true;
+                          evaluate = true;
+                        });
+                      },
+                      child: Text(
+                        "Submit",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      color: Colors.green,
                     ),
                   ),
-                  color: Colors.amber,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 15, 0, 10),
-                child: FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      saveClicked = true;
-                      evaluate = true;
-                    });
-                  },
-                  child: Text(
-                    "Submit",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  color: Colors.green,
-                ),
-              ),
+                ],
+              )
             ],
           ),
         ),
@@ -227,10 +208,10 @@ class _Level1State extends State<Level1> {
                 onPressed: () => _scaffoldKey.currentState.openDrawer(),
                 child: Row(
                   children: <Widget>[
-                    Icon(
-                      Icons.settings,
-                      size: 30.0,
-                      color: Colors.blueGrey,
+                    FaIcon(
+                      FontAwesomeIcons.tools,
+                      size: 20.0,
+                      color: Colors.indigo[900],
                     ),
                     Text(
                       " Tools",
@@ -265,8 +246,8 @@ class _Level1State extends State<Level1> {
                   children: <Widget>[
                     Icon(
                       Icons.help_outline,
-                      size: 30.0,
-                      color: Colors.blueGrey,
+                      size: 27.0,
+                      color: Colors.indigo[900],
                     ),
                     Text(
                       " Help",
@@ -296,7 +277,7 @@ class _Level1State extends State<Level1> {
                 borderSide: BorderSide(
                   width: selectedTool == paintTools.brush ? 5 : 1,
                   style: BorderStyle.solid,
-                  color: selectedTool == paintTools.brush ? Colors.blue : Colors.black,
+                  color: selectedTool == paintTools.brush ? Colors.indigo[900] : Colors.black,
                 ),
                 shape: CircleBorder(),
               ),
@@ -311,11 +292,11 @@ class _Level1State extends State<Level1> {
                     selectedTool = paintTools.eraser;
                   });
                 },
-                child: Icon(Icons.crop_square),
+                child: FaIcon(FontAwesomeIcons.eraser),
                 borderSide: BorderSide(
                   width: selectedTool == paintTools.eraser ? 5 : 1,
                   style: BorderStyle.solid,
-                  color: selectedTool == paintTools.eraser ? Colors.blue : Colors.black,
+                  color: selectedTool == paintTools.eraser ? Colors.indigo[900] : Colors.black,
                 ),
                 shape: CircleBorder(),
               ),
@@ -349,6 +330,31 @@ class _Level1State extends State<Level1> {
                   });
                 },
                 child: Icon(Icons.undo),
+                borderSide: BorderSide(
+                  width: 1.0,
+                  style: BorderStyle.solid,
+                ),
+                shape: CircleBorder(),
+              ),
+            ),
+            Positioned(
+              right: -10,
+              top: 310,
+              child: OutlineButton(
+                onPressed: () async {
+                  bool result = await confirmationDialog(context, "Reset");
+                  if(result == true)
+                  {
+                    showToastMessage("All clear!");
+                    setState(() {
+                      pointsList.clear();
+                      paintedPoints.clear();
+                      squaresList.clear();
+                      circleList.clear();
+                    });
+                  }
+                },
+                child: Icon(Icons.clear),
                 borderSide: BorderSide(
                   width: 1.0,
                   style: BorderStyle.solid,

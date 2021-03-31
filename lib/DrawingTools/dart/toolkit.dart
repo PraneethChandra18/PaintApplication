@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:paint_app/DrawingTools/dart/paintFunctions.dart';
 import 'package:paint_app/utils/global.dart';
 import 'package:diff_image/diff_image.dart';
@@ -123,7 +124,7 @@ class _PickColorState extends State<PickColor> {
                     color: Colors.white,
                   ),
                 ),
-                color: Colors.blue,
+                color: Colors.indigo[900],
               ),
             ),
           ],
@@ -174,10 +175,10 @@ class _SelectStrokeWidthState extends State<SelectStrokeWidth> {
             ),
             SliderTheme(
               data: SliderThemeData(
-                thumbColor: Colors.blue,
-                activeTrackColor: Colors.blue,
-                inactiveTrackColor: Colors.blue[100],
-                overlayColor: Colors.transparent,
+                // thumbColor: Colors.blue,
+                // activeTrackColor: Colors.blue,
+                // inactiveTrackColor: Colors.blue[100],
+                // overlayColor: Colors.transparent,
               ),
               child: Slider(
                 label: strokeWidth.abs().toString(),
@@ -203,7 +204,7 @@ class _SelectStrokeWidthState extends State<SelectStrokeWidth> {
                     color: Colors.white,
                   ),
                 ),
-                color: Colors.blue,
+                color: Colors.indigo[900],
               ),
             ),
           ],
@@ -248,17 +249,17 @@ class _SelectShapeState extends State<SelectShape> {
               borderSide: BorderSide(
                 width: widget.tool == paintTools.square ? 5 : 1,
                 style: BorderStyle.solid,
-                color: widget.tool == paintTools.square ? Colors.blue : Colors.black,
+                color: widget.tool == paintTools.square ? Colors.indigo[900] : Colors.black,
               ),
               shape: CircleBorder(),
             ),
             OutlineButton(
               onPressed: () => widget.changeShape("circle"),
-              child: Icon(Icons.arrow_drop_down_circle),
+              child: FaIcon(FontAwesomeIcons.circle),
               borderSide: BorderSide(
                 width: widget.tool == paintTools.circle ? 5 : 1,
                 style: BorderStyle.solid,
-                color: widget.tool == paintTools.circle ? Colors.blue : Colors.black,
+                color: widget.tool == paintTools.circle ? Colors.indigo[900] : Colors.black,
               ),
               shape: CircleBorder(),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:paint_app/Database/databaseHelper.dart';
 import 'package:paint_app/utils/global.dart';
 import 'package:paint_app/utils/models.dart';
@@ -48,16 +49,25 @@ class _RewardsState extends State<Rewards> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 100.0,
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
+        title: Text("Rewards"),
+        toolbarHeight: 75.0,
+        elevation: 10.0,
+        backgroundColor: Colors.indigo[900],
         iconTheme: IconThemeData(
-          color: Colors.green,
+          color: Colors.white,
         ),
       ),
       body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/themebg.jpg"),
+            fit: BoxFit.cover,
+            repeat: ImageRepeat.repeat,
+          ),
+        ),
         child: Column(
           children: [
+            SizedBox(height: 20.0,),
             Row(
               children: <Widget>[
                 DisplayReward(score, 1, "Square Shape", 1, claimReward),
@@ -93,13 +103,32 @@ class DisplayReward extends StatelessWidget {
 
     return Container(
       width: size.width*0.5,
-      height: size.height * 0.4,
+      height: size.height * 0.35,
       child: Column(
         children: <Widget>[
-          Text(
-            reward,
+          Card(
+            elevation: 10.0,
+            color: Colors.white,
+            child: Column(
+              children: [
+                FaIcon(
+                  reward == "Square Shape" ? FontAwesomeIcons.square : (reward == "Circle Shape" ? FontAwesomeIcons.circle : Icons.brush),
+                  size: 80,
+                ),
+                SizedBox(height: 20),
+                SizedBox(width: size.width*0.4),
+                Text(
+                  reward,
+                  style: TextStyle(
+                    fontSize: 20.0
+                  ),
+                ),
+                SizedBox(height: 20),
+                score < scoreRequired ? FlatButton(onPressed: () => claimReward(rewardNo), child: Text("LOCKED"), color: Colors.grey) : (isClaimed(rewardNo) ? FlatButton(onPressed: () => claimReward(rewardNo), child: Text("CLAIMED"), color: Colors.orange): FlatButton(onPressed: () => claimReward(rewardNo), child: Text("CLAIM"), color: Colors.green,)),
+                SizedBox(height: 20),
+              ],
+            )
           ),
-          score < scoreRequired ? FlatButton(onPressed: () => claimReward(rewardNo), child: Text("LOCKED"), color: Colors.grey) : (isClaimed(rewardNo) ? FlatButton(onPressed: () => claimReward(rewardNo), child: Text("CLAIMED"), color: Colors.orange): FlatButton(onPressed: () => claimReward(rewardNo), child: Text("CLAIM"), color: Colors.green,)),
         ],
       ),
     );

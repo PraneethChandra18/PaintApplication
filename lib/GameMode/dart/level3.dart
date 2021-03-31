@@ -8,8 +8,12 @@ class Level3 extends StatefulWidget {
 class _Level3State extends State<Level3> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text("Level-3"),
+    return Scaffold(
+      body: Center(
+        child: Container(
+          child: Text("Level-3"),
+        ),
+      ),
     );
   }
 }

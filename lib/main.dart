@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+        primarySwatch: Colors.indigo,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(),
@@ -52,7 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Image.asset("assets/images/paint_app.jpg", height: 200.0),
             SizedBox(height: 20.0),
             HomeButtons("Game Mode"),
             HomeButtons("Practice"),
@@ -99,12 +98,12 @@ class HomeButtons extends StatelessWidget {
             ),
             shape: StadiumBorder(),
             borderSide: BorderSide(
-              color: Colors.deepOrange[900],
+              color: Colors.indigo[900],
               width: 3.0,
               style: BorderStyle.solid,
             ),
-            highlightColor: Colors.deepOrangeAccent,
-            highlightedBorderColor: Colors.deepOrangeAccent,
+            highlightColor: Colors.indigo[500],
+            highlightedBorderColor: Colors.indigo[900],
           ),
         ),
         SizedBox(height: size.height*0.02),

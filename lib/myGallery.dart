@@ -75,11 +75,11 @@ class _MyGalleryState extends State<MyGallery> {
       backgroundColor: Colors.indigo[900],
       appBar: AppBar(
         toolbarHeight: 75.0,
-        elevation: 0.0,
-        backgroundColor: !longPress ? Colors.transparent : Colors.green,
-        title: Text(!longPress ? " " : "${selectedList.length} item(s) selected"),
+        elevation: 10.0,
+        backgroundColor: !longPress ? Colors.transparent : Colors.indigo[900],
+        title: Text(!longPress ? "My Gallery" : "${selectedList.length} item(s) selected"),
         iconTheme: IconThemeData(
-          color: Colors.black,
+          color: Colors.white,
         ),
         actions: <Widget>[
           !longPress
@@ -95,7 +95,12 @@ class _MyGalleryState extends State<MyGallery> {
                     longPress = false;
                   });
                 },
-                child: Text("Deselect All"),
+                child: Text(
+                  "Deselect All",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
           ),
@@ -136,40 +141,49 @@ class _MyGalleryState extends State<MyGallery> {
           ),
         ],
       ),
-      body: GridView.builder(
-        itemCount:allImages.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2 ,childAspectRatio: 0.56 ,crossAxisSpacing: 2,mainAxisSpacing: 2),
-        padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 8),
-        scrollDirection: Axis.vertical,
-        //reverse: false,
-        itemBuilder: (context,index) {
-          bool val;
-          var selected = selectedList.firstWhere((f) => f == allImages[index], orElse: () => null);
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/themebg.jpg"),
+            fit: BoxFit.cover,
+            repeat: ImageRepeat.repeat,
+          ),
+        ),
+        child: GridView.builder(
+          itemCount:allImages.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,childAspectRatio: 0.56 ,crossAxisSpacing: 2,mainAxisSpacing: 2),
+          padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 8),
+          scrollDirection: Axis.vertical,
+          //reverse: false,
+          itemBuilder: (context,index) {
+            bool val;
+            var selected = selectedList.firstWhere((f) => f == allImages[index], orElse: () => null);
 
-          if (selected == null) val = false;
-          else val = true;
+            if (selected == null) val = false;
+            else val = true;
 
-          return Card(
-            elevation: 20.0,
-            shadowColor: Colors.black,
-            child: GridItem(
-              item:allImages[index],
-              isSelected: (bool value){
-                setState(() {
-                  if(value){
-                    selectedList.add(allImages[index]);
-                  } else{
-                    selectedList.remove(allImages[index]);
-                  }
-                });
-              },
-              key: Key(allImages[index].toString()),
-              selectedValue: val,
-              allImages: allImages,
-              changeAllImages: changeAllImages,
-            ),
-          );
-        },
+            return Card(
+              elevation: 20.0,
+              shadowColor: Colors.black,
+              child: GridItem(
+                item:allImages[index],
+                isSelected: (bool value){
+                  setState(() {
+                    if(value){
+                      selectedList.add(allImages[index]);
+                    } else{
+                      selectedList.remove(allImages[index]);
+                    }
+                  });
+                },
+                key: Key(allImages[index].toString()),
+                selectedValue: val,
+                allImages: allImages,
+                changeAllImages: changeAllImages,
+              ),
+            );
+          },
+        ),
       ),
     );
   }

@@ -95,29 +95,70 @@ Future<dynamic> exitDialog(BuildContext context) {
   );
 }
 
-showEvaluationScore(BuildContext context, String displayScore) {
+showEvaluationScore(BuildContext context, String displayScore,int stars) {
   showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: const Text('Evaluation Completion'),
+        title: const Text('Evaluation Completed'),
 
-        content: new Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text("Your Score is $displayScore out of 100"),
+        content: Column(
+          children: [
+            Stack(
+              children: <Widget>[
+                Positioned(
+                  top: 50,
+                  left:40,
+                  child: Icon(
+                    Icons.star,
+                    color: (stars==1 || stars ==2 || stars==3)?Colors.amber:Colors.grey,
+                    size:50.0,
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  left:90,
+                  child: Icon(
+                    Icons.star,
+                    color: (stars ==2 || stars==3)?Colors.amber:Colors.grey,
+                    size:50.0,
+                  ),
+                ),
+                Positioned(
+                  top: 50,
+                  left:140,
+                  child: Icon(
+                    Icons.star,
+                    color: (stars==3)?Colors.amber:Colors.grey,
+                    size:50.0,
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              top: 150,
+              left: 70,
+              child: Text(
+                (stars<=1)?"Decent start for beginners\nTry to improve" : (stars<=2)? "Practice more to reach the pinnacle" : "Good job! Keep Drawing",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Positioned(
+              top: 250,
+              left:70,
+              child: FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                textColor: Theme.of(context).primaryColor,
+                child: const Text('CLOSE',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+
+              ),
+            ),
           ],
         ),
-        actions: <Widget>[
-          new FlatButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            textColor: Theme.of(context).primaryColor,
-            child: const Text('Close'),
-          ),
-        ],
       );
     },
   );

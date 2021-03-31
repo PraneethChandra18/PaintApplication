@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:paint_app/DrawingTools/dart/drawingInterface.dart';
 import 'package:paint_app/DrawingTools/dart/paintFunctions.dart';
 import 'package:paint_app/DrawingTools/dart/toolkit.dart';
@@ -102,32 +103,6 @@ class _PracticeState extends State<Practice> {
           child: Column(
             children: <Widget>[
               ToolBox(selectedStrokeWidth, changeStrokeWidth, selectedColor, changeBrushColor, selectedTool, changeShape),
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 15, 0, 10),
-                child: FlatButton(
-                  onPressed: () async {
-
-                    bool result = await confirmationDialog(context, "Reset");
-                    if(result == true)
-                    {
-                      showToastMessage("All clear!");
-                      setState(() {
-                        pointsList.clear();
-                        paintedPoints.clear();
-                        squaresList.clear();
-                        circleList.clear();
-                      });
-                    }
-                  },
-                  child: Text(
-                    "Reset",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  color: Colors.redAccent,
-                ),
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
@@ -213,41 +188,13 @@ class _PracticeState extends State<Practice> {
                 onPressed: () => _scaffoldKey.currentState.openDrawer(),
                 child: Row(
                   children: <Widget>[
-                    Icon(
-                      Icons.settings,
-                      size: 30.0,
-                      color: Colors.blueGrey,
+                    FaIcon(
+                      FontAwesomeIcons.tools,
+                      size: 20.0,
+                      color: Colors.indigo[900],
                     ),
                     Text(
                       " Tools",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                      ),
-                    ),
-                  ],
-                ),
-                borderSide: BorderSide(
-                  width: 1.0,
-                  style: BorderStyle.solid,
-                ),
-              ),
-            ),
-            Positioned(
-              right: 10,
-              top: 30,
-              child: OutlineButton(
-                onPressed: () {
-                  print('Help');
-                },
-                child: Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.help_outline,
-                      size: 30.0,
-                      color: Colors.blueGrey,
-                    ),
-                    Text(
-                      " Help",
                       style: TextStyle(
                         fontSize: 20.0,
                       ),
@@ -274,7 +221,7 @@ class _PracticeState extends State<Practice> {
                 borderSide: BorderSide(
                   width: selectedTool == paintTools.brush ? 5 : 1,
                   style: BorderStyle.solid,
-                  color: selectedTool == paintTools.brush ? Colors.blue : Colors.black,
+                  color: selectedTool == paintTools.brush ? Colors.indigo[900] : Colors.black,
                 ),
                 shape: CircleBorder(),
               ),
@@ -293,7 +240,7 @@ class _PracticeState extends State<Practice> {
                 borderSide: BorderSide(
                   width: selectedTool == paintTools.eraser ? 5 : 1,
                   style: BorderStyle.solid,
-                  color: selectedTool == paintTools.eraser ? Colors.blue : Colors.black,
+                  color: selectedTool == paintTools.eraser ? Colors.indigo[900] : Colors.black,
                 ),
                 shape: CircleBorder(),
               ),
@@ -327,6 +274,31 @@ class _PracticeState extends State<Practice> {
                   });
                 },
                 child: Icon(Icons.undo),
+                borderSide: BorderSide(
+                  width: 1.0,
+                  style: BorderStyle.solid,
+                ),
+                shape: CircleBorder(),
+              ),
+            ),
+            Positioned(
+              right: -10,
+              top: 310,
+              child: OutlineButton(
+                onPressed: () async {
+                  bool result = await confirmationDialog(context, "Reset");
+                  if(result == true)
+                  {
+                    showToastMessage("All clear!");
+                    setState(() {
+                      pointsList.clear();
+                      paintedPoints.clear();
+                      squaresList.clear();
+                      circleList.clear();
+                    });
+                  }
+                },
+                child: Icon(Icons.clear),
                 borderSide: BorderSide(
                   width: 1.0,
                   style: BorderStyle.solid,

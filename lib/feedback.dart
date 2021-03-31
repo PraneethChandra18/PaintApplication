@@ -38,17 +38,19 @@ class _UserFeedbackState extends State<UserFeedback> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 100.0,
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
+        title: Text("Feedback"),
+        toolbarHeight: 75.0,
+        elevation: 10.0,
+        backgroundColor: Colors.indigo[900],
         iconTheme: IconThemeData(
-          color: Colors.green,
+          color: Colors.white,
         ),
       ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            SizedBox(height: 40.0),
             Rating(rating,updateRating),
             SizedBox(height: 20.0),
             Remarks(updateRemarks),
@@ -64,7 +66,7 @@ class _UserFeedbackState extends State<UserFeedback> {
                   color: Colors.white,
                 ),
               ),
-              color: Colors.green,
+              color: Colors.indigo[900],
             ),
           ],
         ),
@@ -105,7 +107,7 @@ class _RatingState extends State<Rating> {
               min: 1.0,
               divisions: 4,
               onChanged: (val) => widget.updateRating(val),
-              activeColor: Colors.green,
+              activeColor: Colors.indigo[900],
               inactiveColor: Colors.amber,
           ),
         ],
