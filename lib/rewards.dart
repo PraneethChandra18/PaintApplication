@@ -23,6 +23,7 @@ class _RewardsState extends State<Rewards> {
 
     int len = userInformation.length;
 
+    print(len);
     score = 0;
     for(int i=0;i<len;i++) {
       this.score += userInformation[i].score;

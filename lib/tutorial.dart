@@ -9,7 +9,16 @@ class _TutorialState extends State<Tutorial> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("Tutorial"),
+      child: Scaffold(
+        body: Center(
+          child: Text(
+            "Tutorial",
+            style: TextStyle(
+              fontSize: 50.0,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

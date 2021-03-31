@@ -97,7 +97,10 @@ class _Level1State extends State<Level1> {
     else if(100-x < 66) stars = 2;
     else stars = 3;
 
-    await dbHelper.updateUserInformation(UserInformation.withLevel(1,stars));
+    int result = await dbHelper.updateUserInformation(UserInformation.withLevel(1,stars));
+    // if(result == 0) {
+    //   await dbHelper.insertUserInformation(UserInformation(stars));
+    // }
     // int c = await dbHelper.getCount();
     // print(c);
     displayScore = x.toStringAsPrecision(3);
