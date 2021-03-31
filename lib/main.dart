@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:paint_app/feedback.dart';
 import 'package:paint_app/gameMode.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.deepOrange,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(),
@@ -40,17 +41,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/bghome.jpg"),
+            fit: BoxFit.cover,
+
+          ),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            HomeButtons("Game mode"),
+            Image.asset("assets/images/paint_app.jpg", height: 200.0),
+            SizedBox(height: 20.0),
+            HomeButtons("Game Mode"),
             HomeButtons("Practice"),
             HomeButtons("My Gallery"),
             HomeButtons("Rewards"),
             HomeButtons("Tutorial"),
             HomeButtons("Feedback"),
-            SizedBox(height: size.height*0.1)
+            SizedBox(height: size.height*0.15)
           ],
         ),
       ),
@@ -71,10 +81,10 @@ class HomeButtons extends StatelessWidget {
     return Column(
       children: <Widget>[
         Container(
-          width: size.width * 0.5,
+          width: size.width * 0.45,
           child: OutlineButton(
             onPressed: (){
-              if(name == "Game mode") Navigator.push(context, MaterialPageRoute(builder: (context) => GameMode()));
+              if(name == "Game Mode") Navigator.push(context, MaterialPageRoute(builder: (context) => GameMode()));
               else if(name == "Practice") Navigator.push(context, MaterialPageRoute(builder: (context) => Practice()));
               else if(name == "My Gallery") Navigator.push(context, MaterialPageRoute(builder: (context) => MyGallery()));
               else if(name == "Rewards") Navigator.push(context, MaterialPageRoute(builder: (context) => Rewards()));
@@ -89,12 +99,12 @@ class HomeButtons extends StatelessWidget {
             ),
             shape: StadiumBorder(),
             borderSide: BorderSide(
-              color: Colors.green,
-              width: 2.0,
+              color: Colors.deepOrange[900],
+              width: 3.0,
               style: BorderStyle.solid,
             ),
-            highlightColor: Colors.green,
-            highlightedBorderColor: Colors.green,
+            highlightColor: Colors.deepOrangeAccent,
+            highlightedBorderColor: Colors.deepOrangeAccent,
           ),
         ),
         SizedBox(height: size.height*0.02),

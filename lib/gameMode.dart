@@ -29,7 +29,6 @@ class _GameModeState extends State<GameMode> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pop(context),
         child: Icon(Icons.exit_to_app),
-        backgroundColor: Colors.green,
       ),
     );
   }

@@ -72,7 +72,7 @@ class _MyGalleryState extends State<MyGallery> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.indigo[900],
       appBar: AppBar(
         toolbarHeight: 75.0,
         elevation: 0.0,
@@ -138,7 +138,7 @@ class _MyGalleryState extends State<MyGallery> {
       ),
       body: GridView.builder(
         itemCount:allImages.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3 ,childAspectRatio: 0.56 ,crossAxisSpacing: 2,mainAxisSpacing: 2),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2 ,childAspectRatio: 0.56 ,crossAxisSpacing: 2,mainAxisSpacing: 2),
         padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 8),
         scrollDirection: Axis.vertical,
         //reverse: false,
