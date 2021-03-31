@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:paint_app/utils/global.dart';
+import 'package:wc_flutter_share/wc_flutter_share.dart';
 
 
 Future<dynamic> confirmationDialog(BuildContext context, String confirmationFor) async {
@@ -93,11 +95,65 @@ Future<dynamic> exitDialog(BuildContext context) {
   );
 }
 
-showPhotoDialog(BuildContext context, File photo) {
+showEvaluationScore(BuildContext context, String displayScore) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Evaluation Completion'),
+
+        content: new Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text("Your Score is $displayScore out of 100"),
+          ],
+        ),
+        actions: <Widget>[
+          new FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            textColor: Theme.of(context).primaryColor,
+            child: const Text('Close'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<void> _shareImage(FileSystemEntity image) async {
+  try {
+    String str = image.toString().substring(7);
+    str = str.substring(0, str.length - 1);
+    await WcFlutterShare.share(sharePopupTitle: 'share',
+        mimeType: 'image/png',
+        fileName: 'image.png',
+        bytesOfFile: File(str).readAsBytesSync());
+
+  } catch (e) {
+    print('error in sharing image : $e');
+  }
+}
+
+Future<bool> deleteImage(BuildContext context, File file) async {
+  bool result = await confirmationDialog(context, "Delete");
+  if(result == true)
+  {
+    showToastMessage("Deleted!");
+    if(await file.exists()){
+      await file.delete();
+    }
+  }
+  return result;
+}
+
+Future<dynamic> showPhotoDialog(BuildContext context, File photo) async {
 
   Size size = MediaQuery.of(context).size;
 
-  showDialog(
+  return await showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
@@ -106,7 +162,10 @@ showPhotoDialog(BuildContext context, File photo) {
           children: [
             FlatButton(
               color: Colors.transparent,
-              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+              onPressed: () async {
+                await _shareImage(photo);
+                Navigator.of(context, rootNavigator: true).pop(0);
+              },
               child: Icon(
                 Icons.share,
                 color: Colors.white,
@@ -114,7 +173,11 @@ showPhotoDialog(BuildContext context, File photo) {
             ),
             FlatButton(
               color: Colors.transparent,
-              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+              onPressed: () async {
+                bool result = await deleteImage(context, photo);
+                if(result) Navigator.of(context, rootNavigator: true).pop(1);
+                else Navigator.of(context, rootNavigator: true).pop(0);
+              },
               child: Icon(
                 Icons.delete,
                 color: Colors.white,
@@ -122,7 +185,7 @@ showPhotoDialog(BuildContext context, File photo) {
             ),
             CloseButton(
               color: Colors.white,
-              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+              onPressed: () => Navigator.of(context, rootNavigator: true).pop(0),
             ),
           ],
         ),

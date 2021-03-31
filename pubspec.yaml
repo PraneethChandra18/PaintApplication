@@ -41,6 +41,7 @@ dependencies:
   wc_flutter_share: any
   http: ^0.12.0+4
   share_extend: ^1.1.0
+  font_awesome_flutter: any
 
 dev_dependencies:
   flutter_test:

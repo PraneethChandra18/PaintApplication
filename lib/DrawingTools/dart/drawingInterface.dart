@@ -246,7 +246,6 @@ class _DrawingInterfaceState extends State<DrawingInterface> {
                             }
 
                             if(evaluate) {
-
                               ByteData bytes2 = await rootBundle.load(widget.finalImage);
                               final byteList2 = bytes2.buffer.asUint8List(bytes2.offsetInBytes, bytes2.lengthInBytes);
 

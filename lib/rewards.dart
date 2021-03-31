@@ -46,6 +46,14 @@ class _RewardsState extends State<Rewards> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 100.0,
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        iconTheme: IconThemeData(
+          color: Colors.green,
+        ),
+      ),
       body: Container(
         child: Column(
           children: [
@@ -81,7 +89,7 @@ class DisplayReward extends StatelessWidget {
   Widget build(BuildContext context) {
 
     var size = MediaQuery.of(context).size;
-    print(score);
+
     return Container(
       width: size.width*0.5,
       height: size.height * 0.4,

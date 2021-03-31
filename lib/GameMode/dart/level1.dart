@@ -39,9 +39,10 @@ class _Level1State extends State<Level1> {
 
   bool saveClicked = false;
   bool captureImage = false;
-  bool evaluate = true;
+  bool evaluate = false;
 
   double evaluationScore = 0.0;
+  String displayScore="";
 
   void updatePoints(List<PaintedPoints> newPointsList, List<PaintedSquares> newSquaresList, PaintedSquares newSquarePoint,
       List<PaintedCircles> newCircleList, PaintedCircles newCirclePoint, List<RecordPaints> newPaintedPoints, List<paintTools> newToolUsageHistory) {
@@ -97,8 +98,11 @@ class _Level1State extends State<Level1> {
     else stars = 3;
 
     await dbHelper.updateUserInformation(UserInformation.withLevel(1,stars));
-    int c = await dbHelper.getCount();
-    print(c);
+    // int c = await dbHelper.getCount();
+    // print(c);
+    displayScore = x.toStringAsPrecision(3);
+
+    await showEvaluationScore(context, displayScore);
     // print(x);
     setState(() {
       evaluationScore = x;

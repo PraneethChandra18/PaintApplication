@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:paint_app/Database/databaseHelper.dart';
 import 'package:paint_app/DrawingTools/dart/drawingInterface.dart';
 import 'package:paint_app/DrawingTools/dart/paintFunctions.dart';
 import 'package:paint_app/DrawingTools/dart/toolkit.dart';
 import 'package:paint_app/utils/global.dart';
+import 'package:paint_app/utils/models.dart';
 import 'package:paint_app/utils/supportingWidgets.dart';
 
 
@@ -12,6 +14,8 @@ class Level2 extends StatefulWidget {
 }
 
 class _Level2State extends State<Level2> {
+
+  DatabaseHelper dbHelper = DatabaseHelper();
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -35,10 +39,10 @@ class _Level2State extends State<Level2> {
 
   bool saveClicked = false;
   bool captureImage = false;
-  bool evaluate = true;
+  bool evaluate = false;
 
   double evaluationScore = 0.0;
-
+  String displayScore="";
 
   void updatePoints(List<PaintedPoints> newPointsList, List<PaintedSquares> newSquaresList, PaintedSquares newSquarePoint,
       List<PaintedCircles> newCircleList, PaintedCircles newCirclePoint, List<RecordPaints> newPaintedPoints, List<paintTools> newToolUsageHistory) {
@@ -85,8 +89,24 @@ class _Level2State extends State<Level2> {
     });
   }
 
-  void changeEvaluationScore(double x) {
-    print(x);
+  void changeEvaluationScore(double x) async {
+
+    int stars = 0;
+
+    if(100-x < 33) stars = 1;
+    else if(100-x < 66) stars = 2;
+    else stars = 3;
+
+    int result = await dbHelper.updateUserInformation(UserInformation.withLevel(2,stars));
+    if(result == 0) {
+      await dbHelper.insertUserInformation(UserInformation(stars));
+    }
+    int c = await dbHelper.getCount();
+    print(c);
+    displayScore = x.toStringAsPrecision(3);
+
+    await showEvaluationScore(context, displayScore);
+    // print(x);
     setState(() {
       evaluationScore = x;
       saveClicked = !saveClicked;
@@ -156,7 +176,8 @@ class _Level2State extends State<Level2> {
                 child: FlatButton(
                   onPressed: () {
                     setState(() {
-
+                      saveClicked = true;
+                      evaluate = true;
                     });
                   },
                   child: Text(
@@ -195,7 +216,7 @@ class _Level2State extends State<Level2> {
                     updatePoints,
                     toggleCaptureImageClicked,
                     changeEvaluationScore,
-                    "assets/level2/level2_6.jpg",
+                    "assets/level1/level1.png",
                   ),
                 )
             ),
@@ -341,8 +362,17 @@ class _Level2State extends State<Level2> {
         onPressed: () async {
           int result = await exitDialog(context);
           if(result == 1) {
-            showToastMessage("Progress saved!");
-            Navigator.pop(context);
+            int result = await saveExistedDialog(context);
+            if(result == 1)
+            {
+              showToastMessage("Progress saved!");
+              Navigator.pop(context);
+            }
+            else if(result == 2)
+            {
+              showToastMessage("Progress saved!");
+              Navigator.pop(context);
+            }
           }
           else if(result == 2) Navigator.pop(context);
         },

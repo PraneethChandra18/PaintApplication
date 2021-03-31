@@ -35,7 +35,7 @@ class _PracticeState extends State<Practice> {
 
   bool saveClicked = false;
   bool captureImage = false;
-  bool evaluate = true;
+  bool evaluate = false;
 
   double evaluationScore = 0.0;
 
@@ -79,7 +79,7 @@ class _PracticeState extends State<Practice> {
   void toggleCaptureImageClicked() {
     showToastMessage("Image Captured");
     setState(() {
-      captureImage = !captureImage;
+      captureImage = false;
       saveClicked = !saveClicked;
     });
   }
@@ -340,11 +340,18 @@ class _PracticeState extends State<Practice> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           int result = await exitDialog(context);
-          if(result == 1) {
-            showToastMessage("Progress saved!");
-            Navigator.pop(context);
+          if (result == 1) {
+            int result = await saveExistedDialog(context);
+            if (result == 1) {
+              showToastMessage("Progress saved!");
+              Navigator.pop(context);
+            }
+            else if (result == 2) {
+              showToastMessage("Progress saved!");
+              Navigator.pop(context);
+            }
           }
-          else if(result == 2) Navigator.pop(context);
+          else if (result == 2) Navigator.pop(context);
         },
         child: Icon(Icons.exit_to_app),
       ),

@@ -1,16 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:paint_app/utils/global.dart';
 import 'package:paint_app/utils/supportingWidgets.dart';
-
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:paint_app/utils/Grid.dart';
-import 'package:share/share.dart';
-import 'package:wc_flutter_share/wc_flutter_share.dart';
 import 'package:share_extend/share_extend.dart';
+
+bool longPress = false;
 
 class MyGallery extends StatefulWidget {
   @override
@@ -23,7 +21,7 @@ class _MyGalleryState extends State<MyGallery> {
   List<FileSystemEntity> selectedList =[];
   var _directory;
   bool button1, button2;
-  static GlobalKey _globalKey = GlobalKey();
+
   void getAllFiles() async
   {
     _directory = await getExternalStorageDirectory();
@@ -39,22 +37,7 @@ class _MyGalleryState extends State<MyGallery> {
       });
     });
   }
-  void _shareImage() async {
-    try {
-      for(int i=0;i<selectedList.length;i++) {
-        String str = selectedList[i].toString().substring(7);
-        str = str.substring(0, str.length - 1);
-        await WcFlutterShare.share(sharePopupTitle: 'share',
-            mimeType: 'image/png',
-            fileName: 'image.png',
-            bytesOfFile: File(str).readAsBytesSync());
-      }
-    } catch (e) {
-      //print('$selectedList');
-      print('error in sharing image : $e');
-    }
 
-  }
   _shareMultipleImages() async {
     var imageList = List<String>();
     for (int i=0;i<selectedList.length;i++) {
@@ -64,12 +47,20 @@ class _MyGalleryState extends State<MyGallery> {
     }
     ShareExtend.shareMultiple(imageList, "image",subject: "Share Images");
   }
+
   Future <void> deleteImage(File file) async {
 
     if(await file.exists()){
       await file.delete();
     }
   }
+
+  changeAllImages(List<FileSystemEntity> list){
+   setState(() {
+     allImages = list;
+   });
+  }
+
   @override
   void initState() {
     button1 = false;
@@ -81,62 +72,104 @@ class _MyGalleryState extends State<MyGallery> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightGreenAccent,
+      backgroundColor: Colors.grey,
       appBar: AppBar(
         toolbarHeight: 75.0,
         elevation: 0.0,
-        backgroundColor: Colors.green,
-        title: Text(selectedList.length < 1 ? "MY GALLERY " : "${selectedList.length} item(s) selected"),
+        backgroundColor: !longPress ? Colors.transparent : Colors.green,
+        title: Text(!longPress ? " " : "${selectedList.length} item(s) selected"),
         iconTheme: IconThemeData(
           color: Colors.black,
         ),
         actions: <Widget>[
+          !longPress
+              ? Container()
+              : InkWell(
+
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FlatButton(
+                onPressed: () {
+                  setState(() {
+                    selectedList.clear();
+                    longPress = false;
+                  });
+                },
+                child: Text("Deselect All"),
+              ),
+            ),
+          ),
+          SizedBox(width: 20.0),
           selectedList.length < 1
               ? Container()
               : InkWell(
-            onTap: (){
-              setState(() {
-                for(int i=0;i<selectedList.length;i++){
-                  allImages.remove(selectedList[i]);
-                  deleteImage(selectedList[i]);
-                }
-                selectedList= [];
-              });
+            onTap: _shareMultipleImages,
+
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.share),
+            ),
+          ),
+          SizedBox(width: 20.0),
+          selectedList.length < 1
+              ? Container()
+              : InkWell(
+            onTap: () async {
+              bool result = await confirmationDialog(context, "Delete");
+              if(result == true)
+              {
+                showToastMessage("Deleted!");
+                setState(() {
+                  for(int i=0;i<selectedList.length;i++){
+                    allImages.remove(selectedList[i]);
+                    deleteImage(selectedList[i]);
+                  }
+                  selectedList= [];
+                });
+              }
             },
 
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Icon(Icons.delete),
             ),
-          )
+          ),
         ],
       ),
       body: GridView.builder(
         itemCount:allImages.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4 ,childAspectRatio: 0.56 ,crossAxisSpacing: 2,mainAxisSpacing: 2),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3 ,childAspectRatio: 0.56 ,crossAxisSpacing: 2,mainAxisSpacing: 2),
         padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 8),
         scrollDirection: Axis.vertical,
         //reverse: false,
         itemBuilder: (context,index) {
-          return GridItem(
-            item:allImages[index],
-            isSelected: (bool value){
-              setState(() {
-                if(value){
-                  selectedList.add(allImages[index]);
-                } else{
-                  selectedList.remove(allImages[index]);
-                }
-              });
-              print("$index : $value ");
-            },
-            key: Key(allImages[index].toString()),
+          bool val;
+          var selected = selectedList.firstWhere((f) => f == allImages[index], orElse: () => null);
+
+          if (selected == null) val = false;
+          else val = true;
+
+          return Card(
+            elevation: 20.0,
+            shadowColor: Colors.black,
+            child: GridItem(
+              item:allImages[index],
+              isSelected: (bool value){
+                setState(() {
+                  if(value){
+                    selectedList.add(allImages[index]);
+                  } else{
+                    selectedList.remove(allImages[index]);
+                  }
+                });
+              },
+              key: Key(allImages[index].toString()),
+              selectedValue: val,
+              allImages: allImages,
+              changeAllImages: changeAllImages,
+            ),
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _shareMultipleImages,
-        child: Icon(Icons.share),
       ),
     );
   }

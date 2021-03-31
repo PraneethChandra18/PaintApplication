@@ -58,7 +58,6 @@ class DatabaseHelper {
     Future<int> updateUserInformation(UserInformation data) async {
       var db = await this.database;
       var result = await db.update(userInformationTable, data.toMap(), where: '$colLevel = ?', whereArgs:  [data.difficultyLevel]);
-      print("Updating...");
       return result;
     }
 
