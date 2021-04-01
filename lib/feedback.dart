@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:paint_app/utils/global.dart';
 
 class UserFeedback extends StatefulWidget {
   @override
@@ -21,17 +21,6 @@ class _UserFeedbackState extends State<UserFeedback> {
     setState(() {
       remarks = val;
     });
-  }
-
-  void showToastMessage(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black87,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
   }
 
   @override

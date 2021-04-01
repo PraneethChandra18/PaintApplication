@@ -13,7 +13,7 @@ bool isClaimed(int rId) {
 void showToastMessage(String message) {
   Fluttertoast.showToast(
     msg: message,
-    toastLength: Toast.LENGTH_LONG,
+    toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.BOTTOM,
     backgroundColor: Colors.black87,
     textColor: Colors.white,
