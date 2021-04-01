@@ -31,6 +31,32 @@ Future<dynamic> confirmationDialog(BuildContext context, String confirmationFor)
   );
 }
 
+Future<dynamic> saveDialog(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Confirmation'),
+        content: Text('Do you want to overwrite the previously saved file?'),
+        actions: <Widget>[
+          new FlatButton(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop(1); // dismisses only the dialog and returns false
+            },
+            child: Text('Overwrite'),
+          ),
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop(0); // dismisses only the dialog and returns true
+            },
+            child: Text('Cancel'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 Future<dynamic> saveExistedDialog(BuildContext context) {
   return showDialog(
     context: context,
@@ -99,16 +125,18 @@ showEvaluationScore(BuildContext context, String displayScore,int stars) {
   showDialog(
     context: context,
     builder: (context) {
+      Size size = MediaQuery.of(context).size;
       return AlertDialog(
-        title: const Text('Evaluation Completed'),
-
-        content: Column(
-          children: [
-            Stack(
+        title: Center(child: const Text('Evaluation Completed')),
+        content: Container(
+          height: size.height*0.4,
+          width: size.width*0.5,
+          child: Center(
+            child: Stack(
               children: <Widget>[
                 Positioned(
                   top: 50,
-                  left:40,
+                  left:45,
                   child: Icon(
                     Icons.star,
                     color: (stars==1 || stars ==2 || stars==3)?Colors.amber:Colors.grey,
@@ -117,7 +145,7 @@ showEvaluationScore(BuildContext context, String displayScore,int stars) {
                 ),
                 Positioned(
                   top: 0,
-                  left:90,
+                  left:95,
                   child: Icon(
                     Icons.star,
                     color: (stars ==2 || stars==3)?Colors.amber:Colors.grey,
@@ -126,39 +154,39 @@ showEvaluationScore(BuildContext context, String displayScore,int stars) {
                 ),
                 Positioned(
                   top: 50,
-                  left:140,
+                  left:145,
                   child: Icon(
                     Icons.star,
                     color: (stars==3)?Colors.amber:Colors.grey,
                     size:50.0,
                   ),
                 ),
+                Positioned(
+                  top: 150,
+                  left:0,
+                  child: Text(
+                    (stars<=1)?"Decent start for beginners\nTry to improve" : (stars<=2)? "Practice more to reach the pinnacle" : "Good job! Keep Drawing",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 250,
+                  left:80,
+                  child: FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    textColor: Theme.of(context).primaryColor,
+                    child: const Text('CLOSE',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+
+                  ),
+                ),
               ],
             ),
-            Positioned(
-              top: 150,
-              left: 70,
-              child: Text(
-                (stars<=1)?"Decent start for beginners\nTry to improve" : (stars<=2)? "Practice more to reach the pinnacle" : "Good job! Keep Drawing",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 250,
-              left:70,
-              child: FlatButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                textColor: Theme.of(context).primaryColor,
-                child: const Text('CLOSE',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-
-              ),
-            ),
-          ],
-        ),
+          ),
+        )
       );
     },
   );
@@ -312,28 +340,74 @@ class _HelpCarouselState extends State<HelpCarousel> {
 
 showCarouselDialog(BuildContext context, List<List<String>> itemList) {
 
-
   showDialog(
     context: context,
     builder: (context) {
-      return AlertDialog(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Help",
-              style: TextStyle(
-                color: Colors.white,
+      bool target = true;
+      return StatefulBuilder(
+        builder: (context, setState) {
+          Size size = MediaQuery.of(context).size;
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Help",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                CloseButton(
+                  color: Colors.white,
+                  onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+                ),
+              ],
+            ),
+            backgroundColor: Colors.black26,
+            content: Container(
+              height: size.height*0.7,
+              width: size.width*0.8,
+              child: Column(
+                children: [
+                  target ? Column(
+                    children: [
+                      Text(
+                        "Target Image",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      SizedBox(height: 20.0,),
+                      Image.asset(itemList[itemList.length-1][1], fit: BoxFit.cover),
+                      SizedBox(height: 20.0,),
+                    ],
+                  ) : HelpCarousel(itemList),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      FlatButton(
+                        onPressed: (){
+                          setState((){
+                            target = false;
+                          });
+                        },
+                        child: Text("Show Steps"),
+                        color: target ? Colors.white : Colors.green,
+                      ),
+                      FlatButton(
+                        onPressed: (){
+                          setState((){
+                            target = true;
+                          });
+                        },
+                        child: Text("Target"),
+                        color: target ? Colors.green : Colors.white,
+                      ),
+                    ],
+                  )
+                ],
               ),
             ),
-            CloseButton(
-              color: Colors.white,
-              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.black26,
-        content: HelpCarousel(itemList),
+          );
+        }
       );
     },
   );

@@ -78,7 +78,7 @@ class DatabaseHelper {
 
       var userInformationMapList = await getUserInformationMapList();
       int count = userInformationMapList.length;
-      print(userInformationMapList);
+
       List<UserInformation> userInformationList = List<UserInformation>();
 
       for(int i=0;i<count;i++) {

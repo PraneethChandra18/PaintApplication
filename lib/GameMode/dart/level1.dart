@@ -106,7 +106,7 @@ class _Level1State extends State<Level1> {
     // print(c);
     displayScore = x.toStringAsPrecision(3);
 
-    await showEvaluationScore(context, displayScore, stars);
+    await showEvaluationScore(context, displayScore, 4-stars);
     // print(x);
     setState(() {
       evaluationScore = x;
@@ -131,12 +131,8 @@ class _Level1State extends State<Level1> {
                     padding: EdgeInsets.fromLTRB(0, 15, 0, 10),
                     child: FlatButton(
                       onPressed: () async {
-                        int result = await saveExistedDialog(context);
+                        int result = await saveDialog(context);
                         if(result == 1)
-                        {
-                          showToastMessage("Progress saved!");
-                        }
-                        else if(result == 2)
                         {
                           showToastMessage("Progress saved!");
                         }
@@ -369,13 +365,8 @@ class _Level1State extends State<Level1> {
         onPressed: () async {
           int result = await exitDialog(context);
           if(result == 1) {
-            int result = await saveExistedDialog(context);
-            if(result == 1)
-            {
-              showToastMessage("Progress saved!");
-              Navigator.pop(context);
-            }
-            else if(result == 2)
+            int r = await saveDialog(context);
+            if(r == 1)
             {
               showToastMessage("Progress saved!");
               Navigator.pop(context);

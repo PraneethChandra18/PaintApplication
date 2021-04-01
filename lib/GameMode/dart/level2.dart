@@ -131,12 +131,8 @@ class _Level2State extends State<Level2> {
                     padding: EdgeInsets.fromLTRB(0, 15, 0, 10),
                     child: FlatButton(
                       onPressed: () async {
-                        int result = await saveExistedDialog(context);
+                        int result = await saveDialog(context);
                         if(result == 1)
-                        {
-                          showToastMessage("Progress saved!");
-                        }
-                        else if(result == 2)
                         {
                           showToastMessage("Progress saved!");
                         }
@@ -368,13 +364,8 @@ class _Level2State extends State<Level2> {
         onPressed: () async {
           int result = await exitDialog(context);
           if(result == 1) {
-            int result = await saveExistedDialog(context);
-            if(result == 1)
-            {
-              showToastMessage("Progress saved!");
-              Navigator.pop(context);
-            }
-            else if(result == 2)
+            int r = await saveDialog(context);
+            if(r == 1)
             {
               showToastMessage("Progress saved!");
               Navigator.pop(context);

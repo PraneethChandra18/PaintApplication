@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            SizedBox(height: 20.0),
+            Image.asset("assets/images/flogo.jpg",height: size.height*0.25),
             HomeButtons("Game Mode"),
             HomeButtons("Practice"),
             HomeButtons("My Gallery"),

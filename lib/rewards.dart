@@ -24,7 +24,6 @@ class _RewardsState extends State<Rewards> {
 
     int len = userInformation.length;
 
-    print(len);
     score = 0;
     for(int i=0;i<len;i++) {
       this.score += userInformation[i].score;
@@ -70,8 +69,8 @@ class _RewardsState extends State<Rewards> {
             SizedBox(height: 20.0,),
             Row(
               children: <Widget>[
-                DisplayReward(score, 1, "Square Shape", 1, claimReward),
-                DisplayReward(score, 2, "Circle Shape", 3, claimReward),
+                DisplayReward(score, 1, "Shape - Square", 1, claimReward),
+                DisplayReward(score, 2, "Shape - Circle", 3, claimReward),
               ],
             ),
             Row(
@@ -112,7 +111,7 @@ class DisplayReward extends StatelessWidget {
             child: Column(
               children: [
                 FaIcon(
-                  reward == "Square Shape" ? FontAwesomeIcons.square : (reward == "Circle Shape" ? FontAwesomeIcons.circle : Icons.brush),
+                  reward == "Shape - Square" ? FontAwesomeIcons.square : (reward == "Shape - Circle" ? FontAwesomeIcons.circle : Icons.brush),
                   size: 80,
                 ),
                 SizedBox(height: 20),
